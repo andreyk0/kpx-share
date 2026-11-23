@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  Throwaway fixture: imported into a temporary KDBX by tests/import_keepassxc.rs,
+  then exported again with keepassxc-cli, so the code under test reads real
+  keepassxc-cli output. Every value here is fake.
+  Group/entry UUIDs are a repeated hex byte: entry 0x11.. is EREREREREREREREREREREQ==.
+  Trailing spaces are written as &#32; so editors that strip trailing whitespace keep them.
+-->
+<KeePassFile>
+  <Meta>
+    <Generator>hand-written</Generator>
+    <DatabaseName>fixture</DatabaseName>
+    <RecycleBinEnabled>True</RecycleBinEnabled>
+    <RecycleBinUUID>zMzMzMzMzMzMzMzMzMzMzA==</RecycleBinUUID>
+    <Binaries>
+      <Binary ID="0" Compressed="True">H4sIAAAAAAAC/0uv0k0sKUlMzuACAJTqleIKAAAA</Binary>
+      <Binary ID="1" Compressed="False">cGxhaW4tYXR0YWNo</Binary>
+    </Binaries>
+  </Meta>
+  <Root>
+    <Group>
+      <UUID>qqqqqqqqqqqqqqqqqqqqqg==</UUID>
+      <Name>Root</Name>
+      <Entry>
+        <UUID>EREREREREREREREREREREQ==</UUID>
+        <Tags>ops;agent</Tags>
+        <String><Key>Title</Key><Value>Server</Value></String>
+        <String><Key>UserName</Key><Value>admin</Value></String>
+        <String><Key>Password</Key><Value ProtectInMemory="True">pw-11 &lt;current&gt; &amp; "quoted"</Value></String>
+        <String><Key>URL</Key><Value>https://srv.example/</Value></String>
+        <String><Key>Notes</Key><Value>line one
+line two with trailing spaces&#32;&#32;&#32;
+	tab-indented
+
+</Value></String>
+        <String><Key>API Key</Key><Value ProtectInMemory="True">  spaced key  </Value></String>
+        <String><Key>otp</Key><Value ProtectInMemory="True">otpauth://totp/Server:admin?secret=JBSWY3DPEHPK3PXP&amp;issuer=Server</Value></String>
+        <Binary><Key>gz.txt</Key><Value Ref="0"/></Binary>
+        <Binary><Key>plain.bin</Key><Value Ref="1"/></Binary>
+        <History>
+          <Entry>
+            <UUID>EREREREREREREREREREREQ==</UUID>
+            <Tags>agent</Tags>
+            <String><Key>Title</Key><Value>Server (old)</Value></String>
+            <String><Key>Password</Key><Value ProtectInMemory="True">OLD-HISTORY-PASSWORD</Value></String>
+            <String><Key>HistoryOnly</Key><Value>leaked-from-history</Value></String>
+          </Entry>
+        </History>
+      </Entry>
+      <Entry>
+        <UUID>IiIiIiIiIiIiIiIiIiIiIg==</UUID>
+        <String><Key>Title</Key><Value>Untagged</Value></String>
+        <String><Key>UserName</Key><Value>nobody</Value></String>
+        <String><Key>Password</Key><Value ProtectInMemory="True">pw-22</Value></String>
+        <String><Key>URL</Key><Value></Value></String>
+      </Entry>
+      <Group>
+        <UUID>u7u7u7u7u7u7u7u7u7u7uw==</UUID>
+        <Name>Work</Name>
+        <Entry>
+          <UUID>MzMzMzMzMzMzMzMzMzMzMw==</UUID>
+          <Tags>AGENT</Tags>
+          <String><Key>Title</Key><Value>Ref User</Value></String>
+          <String><Key>UserName</Key><Value>{TITLE}-user</Value></String>
+          <String><Key>Password</Key><Value ProtectInMemory="True">{REF:P@I:11111111111111111111111111111111}</Value></String>
+          <String><Key>URL</Key><Value>{REF:A@I:11111111111111111111111111111111}login</Value></String>
+          <String><Key>Notes</Key><Value>{UNKNOWN} and {password}</Value></String>
+          <String><Key>TOTP Seed</Key><Value ProtectInMemory="True">GEZDGNBVGY3TQOJQ</Value></String>
+          <String><Key>TOTP Settings</Key><Value>30;8</Value></String>
+        </Entry>
+        <Group>
+          <UUID>3d3d3d3d3d3d3d3d3d3d3Q==</UUID>
+          <Name>Sub</Name>
+          <Entry>
+            <UUID>RERERERERERERERERERERA==</UUID>
+            <Tags>games,Agent</Tags>
+            <String><Key>Title</Key><Value>Steam</Value></String>
+            <String><Key>UserName</Key><Value>gamer</Value></String>
+            <String><Key>Password</Key><Value ProtectInMemory="True">pw-44</Value></String>
+            <String><Key>TOTP Seed</Key><Value ProtectInMemory="True">STEAMSEEDBASE32</Value></String>
+            <String><Key>TOTP Settings</Key><Value>30;S</Value></String>
+          </Entry>
+          <Entry>
+            <UUID>VVVVVVVVVVVVVVVVVVVVVQ==</UUID>
+            <Tags>agent</Tags>
+            <String><Key>Title</Key><Value>KeePass2</Value></String>
+            <String><Key>UserName</Key><Value>kp2</Value></String>
+            <String><Key>Password</Key><Value ProtectInMemory="True">pw-55</Value></String>
+            <String><Key>TimeOtp-Secret-Base32</Key><Value ProtectInMemory="True">MFRGGZDFMZTWQ2LK</Value></String>
+            <String><Key>TimeOtp-Period</Key><Value>60</Value></String>
+            <String><Key>TimeOtp-Length</Key><Value>8</Value></String>
+            <String><Key>TimeOtp-Algorithm</Key><Value>HMAC-SHA-256</Value></String>
+          </Entry>
+          <Entry>
+            <UUID>ZmZmZmZmZmZmZmZmZmZmZg==</UUID>
+            <Tags>agent</Tags>
+            <String><Key>Title</Key><Value>Cycle A</Value></String>
+            <String><Key>Password</Key><Value ProtectInMemory="True">{REF:P@I:77777777777777777777777777777777}</Value></String>
+          </Entry>
+          <Entry>
+            <UUID>d3d3d3d3d3d3d3d3d3d3dw==</UUID>
+            <String><Key>Title</Key><Value>Cycle B</Value></String>
+            <String><Key>Password</Key><Value ProtectInMemory="True">{REF:P@I:66666666666666666666666666666666}</Value></String>
+          </Entry>
+        </Group>
+      </Group>
+      <Group>
+        <UUID>zMzMzMzMzMzMzMzMzMzMzA==</UUID>
+        <Name>Recycle Bin</Name>
+        <Entry>
+          <UUID>iIiIiIiIiIiIiIiIiIiIiA==</UUID>
+          <Tags>agent</Tags>
+          <String><Key>Title</Key><Value>Deleted</Value></String>
+          <String><Key>Password</Key><Value ProtectInMemory="True">pw-88</Value></String>
+        </Entry>
+      </Group>
+    </Group>
+  </Root>
+</KeePassFile>
