@@ -142,7 +142,8 @@ impl ImportRoot {
 
     /// Takes the one import's lock: an exclusive `flock` on the root directory itself, so no
     /// lock file is left and none can be planted, released when the [`ImportLock`] is dropped
-    /// (or the process dies). The descriptor is close-on-exec, so no child holds it.
+    /// (or the process dies). The descriptor is close-on-exec, so no program an import runs
+    /// keeps it.
     ///
     /// # Errors
     /// [`StagingError::Busy`] when another import holds it; never waits.
@@ -167,6 +168,18 @@ impl ImportRoot {
 pub struct ImportLock {
     root: ImportRoot,
     fd: OwnedFd,
+}
+
+/// Unlocks before the descriptor closes. A `flock` belongs to the open file description, so
+/// closing this descriptor releases it only once every copy is closed too, and a child that
+/// another thread forked holds a copy until it execs. `LOCK_UN` releases it through every copy
+/// at once, so the next import finds the root free.
+impl Drop for ImportLock {
+    fn drop(&mut self) {
+        // Unlocking a held lock on an open descriptor has no failure to handle; were it to fail,
+        // the lock would still go with the last copy's close.
+        let _unlocked = rustix::fs::flock(&self.fd, rustix::fs::FlockOperation::Unlock);
+    }
 }
 
 impl ImportLock {
@@ -902,6 +915,25 @@ mod tests {
 
     fn hvac() -> SafeName {
         SafeName::parse("hvac").unwrap()
+    }
+
+    /// A released lock is free at once, even while another descriptor of its open file
+    /// description survives, as one does in a child that another thread forked and that has not
+    /// yet exec'd: close-on-exec only closes the copy at exec. A `dup` stands in for that copy.
+    /// Red when the release only closes the descriptor: the copy keeps the `flock`, and the next
+    /// import refuses as busy.
+    #[test]
+    fn a_released_lock_is_free_while_a_copy_of_its_descriptor_survives() {
+        let (scratch, lock) = locked_root();
+        let copy = rustix::io::dup(lock.fd()).unwrap();
+        drop(lock);
+
+        let again = ImportRoot::in_runtime_dir(Some(scratch.path().as_os_str()))
+            .unwrap()
+            .lock();
+
+        assert!(again.is_ok(), "{again:?}");
+        drop(copy);
     }
 
     /// A claimed name records where it came from, and only exactly that shape is one. Red when

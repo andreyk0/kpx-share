@@ -1448,9 +1448,8 @@ fn cancelling_the_password_dialog_is_a_decline() {
     assert_no_leak(&setting, &run, Keepassxc::NeverRan, &[]);
 }
 
-/// Holds `dir`'s lock in a child `flock` process, so no descriptor of the test process holds it
-/// (a fork in a parallel test could otherwise keep it held past its release); released when the
-/// child's stdin closes.
+/// Holds `dir`'s lock in a child `flock` process, as a concurrent import in another process would;
+/// released when the child's stdin closes.
 struct HeldLock(Child);
 
 impl HeldLock {
