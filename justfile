@@ -16,13 +16,17 @@ build:
 install: build
     install -m 755 target/release/kpx-share ~/.cargo/bin/kpx-share
 
-# Empties target/ but keeps it a btrfs subvolume, so fs snapshots skip build output.
-# `cargo clean` would delete the subvolume, and the next build would recreate a plain directory.
+# Empties target/. On btrfs it keeps target/ a subvolume, so filesystem snapshots skip build
+# output: `cargo clean` would delete the subvolume, and the next build would make a plain directory.
 clean:
     #!/usr/bin/env bash
     set -euo pipefail
+    shopt -s inherit_errexit
+    fs=$(stat -f -c %T .)
+    if [[ "$fs" != btrfs ]]; then
+        cargo clean
     # A btrfs subvolume root always has inode 256.
-    if [[ -e target && "$(stat -c %i target)" == 256 ]]; then
+    elif [[ -e target && "$(stat -c %i target)" == 256 ]]; then
         find target -mindepth 1 -delete
     else
         rm -rf target
